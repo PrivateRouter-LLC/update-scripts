@@ -11,7 +11,7 @@ UPDATE_NEEDED="0"
 
 CURRENT_HASH=$(
     curl \
-        cd --silent https://api.github.com/repos/PrivateRouter-LLC/dockerdeploy/commits/main |
+        --silent https://api.github.com/repos/PrivateRouter-LLC/dockerdeploy/commits/main |
         jq --raw-output '.sha'
 )
 
