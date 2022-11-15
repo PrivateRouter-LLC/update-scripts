@@ -3,6 +3,14 @@
 # Version 1.0
 # Contact: ops@torguard.net
 
+# If we are not connected to the internet, exit this updater
+is_connected() {
+    ping -q -c3 1.1.1.1 >/dev/null 2>&1
+    return $?
+}
+
+[ is_connected ] || exit 0
+
 HASH_STORE="/etc/config/.dockerdeploy"
 GIT_URL="https://github.com/PrivateRouter-LLC/dockerdeploy.git"
 TMP_DIR="/tmp/dockerdeploy"
