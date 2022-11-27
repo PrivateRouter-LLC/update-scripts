@@ -3,3 +3,4 @@
 
 bash /root/update-scripts/update-docker-compose-templates.sh
 bash /root/update-scripts/update-dockerdeploy.sh
+bash /root/update-scripts/update-repo.sh
