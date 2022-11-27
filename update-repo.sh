@@ -74,23 +74,16 @@ if [[ "${UPDATE_NEEDED}" == "1" ]]; then
         cat "${REPO_LOCATION}/crontabs" >> /etc/crontabs/root
         /etc/init.d/cron restart
     }
+
+    # Execute Script to install our packages we want installed
+    [ -f "${REPO_LOCATION}/update-repo-packages.sh" ] && {
+        echo "Executing ${REPO_LOCATION}/update-repo-packages.sh"
+        bash "${REPO_LOCATION}/update-repo-packages.sh"
+    }
+
 else
     echo "No update needed for ${REPO_LOCATION}"
 fi
 
-# Always install our repo's public key to the router
-wget -qO /tmp/public.key https://repo.privaterouter.com/public.key
-opkg-key add /tmp/public.key
-rm /tmp/public.key 
-
-# Always update the repo
-sed -i '/privaterouter_repo/d' /etc/opkg/customfeeds.conf 
-echo "src/gz privaterouter_repo https://repo.privaterouter.com" >> /etc/opkg/customfeeds.conf
-
-# Execute Script to install our packages we want installed
-[ -f "${REPO_LOCATION}/update-repo-packages.sh" ] && {
-    echo "Executing ${REPO_LOCATION}/update-repo-packages.sh"
-    bash "${REPO_LOCATION}/update-repo-packages.sh"
-}
 
 
