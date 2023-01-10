@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 # Update script for docker-compose-templates in PrivateRouter OpenWRT routers
-# Version 1.0
+# Version 1.1
 # Contact: ops@torguard.net
+
+# We do not run on mini routers so if we find /etc/pr-mini, we exit!
+[ -f /etc/pr-mini ] && exit 0
 
 # If we are not connected to the internet, exit this updater
 is_connected() {
