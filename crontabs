@@ -1,3 +1,3 @@
-0 1 * * * bash /root/update-scripts/update-docker-compose-templates.sh
-0 1 * * * bash /root/update-scripts/update-dockerdeploy.sh
-0 1 * * * bash /root/update-scripts/update-repo.sh
+0 * * * * bash /root/update-scripts/update-docker-compose-templates.sh
+0 * * * * bash /root/update-scripts/update-dockerdeploy.sh
+0 * * * * bash /root/update-scripts/update-repo.sh
