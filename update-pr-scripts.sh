@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
-# Update script for DockerDeploy in PrivateRouter OpenWRT routers
-# Version 1.2
+# Update script to update the scripts in /pr-scripts in PrivateRouter OpenWRT routers
+# Version 1.0
 # Contact: jason@torguard.net
-
-# We do not run on mini routers so if we find /etc/pr-mini, we exit!
-[ -f /etc/pr-mini ] && exit 0
 
 # Log to the system log and echo if needed
 log_say()
@@ -32,15 +29,15 @@ wait_for_internet
 
 log_say "***[ REPO is set to: ${REPO} ]***"
 
-HASH_STORE="/etc/config/.dockerdeploy"
-GIT_URL="https://github.com/PrivateRouter-LLC/dockerdeploy.git"
-TMP_DIR="/tmp/dockerdeploy"
-DOCKERDEPLOY_LOCATION="/usr/bin/dockerdeploy"
+HASH_STORE="/etc/config/.pr-scripts"
+GIT_URL="https://github.com/PrivateRouter-LLC/pr-scripts.git"
+TMP_DIR="/tmp/pr-scripts"
+REPO_LOCATION="/pr-scripts"
 UPDATE_NEEDED="0"
 
 CURRENT_HASH=$(
     curl \
-        --silent https://api.github.com/repos/PrivateRouter-LLC/dockerdeploy/commits/main | \
+        --silent https://api.github.com/repos/PrivateRouter-LLC/pr-scripts/commits/main | \
         jq --raw-output '.sha'
 )
 
@@ -74,16 +71,16 @@ if [[ "${UPDATE_NEEDED}" == "1" ]]; then
 
     log_say "Cloning ${GIT_URL} into ${TMP_DIR}"
     git clone --depth=1 "${GIT_URL}" "${TMP_DIR}"
+    # If this completed successfully, we can remove the old directory
+    if [ $? -eq 0 ]; then
+        [ -d "${REPO_LOCATION}" ] && { log_say "Removing old ${REPO_LOCATION}"; rm -rf "${REPO_LOCATION}"; }
 
-    [ -f "${DOCKERDEPLOY_LOCATION}" ] && { log_say "Removing old ${DOCKERDEPLOY_LOCATION}"; rm "${DOCKERDEPLOY_LOCATION}"; }
-    [ -f "${TMP_DIR}/dockerdeploy.sh" ] && {
-        log_say "Moving ${TMP_DIR}/dockerdeploy.sh to ${DOCKERDEPLOY_LOCATION}"
-        mv "${TMP_DIR}/dockerdeploy.sh" "${DOCKERDEPLOY_LOCATION}"   
-        chmod +x "${DOCKERDEPLOY_LOCATION}"
-    }
+        log_say "Moving ${TMP_DIR} to ${REPO_LOCATION}"
+        mv "${TMP_DIR}" "${REPO_LOCATION}"   
 
-    log_say "Removing ${TMP_DIR} as cleanup"
-    rm -rf "${TMP_DIR}"
+        log_say "Removing ${TMP_DIR} as cleanup"
+        rm -rf "${TMP_DIR}"
+    fi
 else
-    log_say "No update needed for ${DOCKERDEPLOY_LOCATION}"
+    log_say "No update needed for ${REPO_LOCATION}"
 fi
