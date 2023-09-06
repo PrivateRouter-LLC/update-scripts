@@ -3,6 +3,9 @@
 # Version 1.1
 # Contact: jason@torguard.net
 
+# Source our base OpenWRT functions
+. /lib/functions.sh
+
 # Log to the system log and echo if needed
 log_say()
 {

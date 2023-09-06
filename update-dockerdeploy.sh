@@ -6,6 +6,9 @@
 # We do not run on mini routers so if we find /etc/pr-mini, we exit!
 [ -f /etc/pr-mini ] && exit 0
 
+# Source our base OpenWRT functions
+. /lib/functions.sh
+
 # Log to the system log and echo if needed
 log_say()
 {
